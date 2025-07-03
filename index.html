@@ -20,8 +20,8 @@
         <div class="terminal-content">
             <div class="boot-sequence">
                 <pre class="ascii-art">
-    ____  __  ____   __  ____________     __________  __    ____ 
-   / __ \/ / / / /  / / / /_  __/ __ \   / ____/ __ \/ /   / __ \
+    ____  __  ____   __  ___________     __________  __    ____ 
+   / __ \/ / / / /  / / / /_  __/ /__/   / ____/ __ \/ /   / __ \
   / / / / / / / /  / / / / / / / /_/ /  / / __/ / / / /   / / / /
  / /_/ / /_/ / /__/ /_/ / / / / __  /  / /_/ / /_/ / /___/ /_/ / 
 /_____/\____/_____\____/ /_/ /_/ /_/   \____/\____/_____/_____/  
@@ -72,14 +72,36 @@
 
                     <section id="add-edit-section" class="content-section">
                         <h2 class="section-title">DATA ENTRY TERMINAL</h2>
-                        <div id="edit-form" class="edit-form"></div>
+                        <div class="edit-section-container">
+                            <div class="side-terminal-monitor">
+                                <div class="monitor-header">
+                                    <span class="monitor-title">VISUAL FEED</span>
+                                    <div class="monitor-status">
+                                        <span class="status-light"></span>
+                                        <span class="status-light"></span>
+                                        <span class="status-light"></span>
+                                    </div>
+                                </div>
+                                <div class="monitor-screen">
+                                    <img src="assets/mainpageimage.png" alt="Expedition Visual" class="monitor-image">
+                                </div>
+                                <div class="monitor-info">
+                                    <div class="monitor-label">SIGNAL STRENGTH</div>
+                                    <div class="monitor-data">87.3%</div>
+                                    <div class="monitor-label" style="margin-top: 10px;">LOCATION</div>
+                                    <div class="monitor-data">DULUTH SECTOR</div>
+                                </div>
+                            </div>
+                            <div id="edit-form" class="edit-form"></div>
+                        </div>
                     </section>
                 </main>
 
                 <footer class="terminal-footer">
+                    <div class="terminal-output" id="terminal-output"></div>
                     <div class="terminal-input">
                         <span class="prompt">&gt;</span>
-                        <input type="text" class="command-input" placeholder="Enter command...">
+                        <input type="text" class="command-input" placeholder="Type 'help' for commands">
                     </div>
                     <div class="status-bar">
                         <span class="status-item">MEM: 64K</span>

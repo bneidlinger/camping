@@ -148,6 +148,21 @@ function generateSpecialStats() {
     return stats;
 }
 
+// Helper function to get item image HTML
+function getItemImageHTML(item, showPlaceholder = false) {
+    if (item.imageData) {
+        // Use base64 data from localStorage
+        return `<img src="${item.imageData}" class="item-image" alt="${item.name}">`;
+    } else if (item.image) {
+        // Use file from assets folder
+        return `<img src="assets/${item.image}" class="item-image" alt="${item.name}">`;
+    } else if (showPlaceholder) {
+        // Show placeholder
+        return '<div style="width: 60px; height: 60px; background: var(--terminal-border); display: flex; align-items: center; justify-content: center;">?</div>';
+    }
+    return '';
+}
+
 // Store S.P.E.C.I.A.L. stats for each person
 const personStats = {};
 expeditionData.people.forEach(person => {
@@ -171,6 +186,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Initialize the interface
 function initializeInterface() {
+    // Check for saved data in localStorage
+    const savedData = localStorage.getItem('expeditionData');
+    if (savedData) {
+        try {
+            const parsedData = JSON.parse(savedData);
+            // Ask user if they want to load saved data
+            if (confirm(`Found saved data from ${new Date(parsedData.savedAt).toLocaleString()}. Load it?`)) {
+                expeditionData.trip_name = parsedData.trip_name;
+                expeditionData.date = parsedData.date;
+                expeditionData.location = parsedData.location;
+                expeditionData.people = parsedData.people;
+                
+                // Update UI with loaded data
+                document.getElementById('expedition-date').textContent = expeditionData.date;
+                document.getElementById('expedition-location').textContent = expeditionData.location.toUpperCase();
+            }
+        } catch (error) {
+            console.error('Error loading saved data:', error);
+        }
+    }
+    
     updateClock();
     setupNavigation();
     renderPersonnel();
@@ -181,6 +217,30 @@ function initializeInterface() {
     setupCommandInput();
     animateRadiation();
     setupImageHovers();
+    animateMonitor();
+}
+
+// Animate the side monitor
+function animateMonitor() {
+    // Animate signal strength
+    setInterval(() => {
+        const signalElement = document.querySelector('.monitor-data');
+        if (signalElement) {
+            const signal = (Math.random() * 10 + 85).toFixed(1);
+            signalElement.textContent = `${signal}%`;
+        }
+    }, 3000);
+    
+    // Occasionally glitch the image
+    setInterval(() => {
+        const monitor = document.querySelector('.monitor-image');
+        if (monitor) {
+            monitor.style.filter = `sepia(0.2) contrast(1.2) brightness(0.9) hue-rotate(${Math.random() * 10}deg)`;
+            setTimeout(() => {
+                monitor.style.filter = 'sepia(0.2) contrast(1.2) brightness(0.9)';
+            }, 100);
+        }
+    }, 5000);
 }
 
 // Clock update
@@ -244,7 +304,7 @@ function renderPersonnel() {
                 <h4 style="color: var(--terminal-amber); margin: 15px 0 10px;">Equipment:</h4>
                 ${person.inventory.map(item => `
                     <div class="inventory-item">
-                        ${item.image ? `<img src="assets/${item.image}" class="item-image" alt="${item.name}">` : ''}
+                        ${getItemImageHTML(item)}
                         <div class="item-details">
                             <div class="item-name">${item.name}</div>
                             <div class="item-type">${item.type}</div>
@@ -278,7 +338,7 @@ function renderInventory() {
             itemCard.className = 'inventory-item';
             
             itemCard.innerHTML = `
-                ${item.image ? `<img src="assets/${item.image}" class="item-image" alt="${item.name}">` : '<div style="width: 60px; height: 60px; background: var(--terminal-border); display: flex; align-items: center; justify-content: center;">?</div>'}
+                ${getItemImageHTML(item, true)}
                 <div class="item-details">
                     <div class="item-name">${item.name}</div>
                     <div class="item-type">${item.type}</div>
@@ -540,6 +600,12 @@ function setupEditForm() {
             </div>
             
             <div class="form-group">
+                <label for="item-image">Item Image</label>
+                <input type="file" id="item-image" accept="image/*">
+                <div id="image-preview" style="margin-top: 10px;"></div>
+            </div>
+            
+            <div class="form-group">
                 <label for="power-source">Power Source</label>
                 <input type="text" id="power-source">
             </div>
@@ -561,14 +627,54 @@ function setupEditForm() {
         </form>
         
         <div style="margin-top: 40px; padding: 20px; border: 2px solid var(--terminal-border);">
-            <h4 style="color: var(--terminal-amber); margin-bottom: 10px;">Export Data</h4>
-            <button class="btn" onclick="exportData()">DOWNLOAD YAML</button>
+            <h4 style="color: var(--terminal-amber); margin-bottom: 20px;">Data Management</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <button class="btn" onclick="exportData()">EXPORT YAML</button>
+                <button class="btn" onclick="document.getElementById('yaml-import').click()">IMPORT YAML</button>
+                <button class="btn" onclick="saveToLocalStorage()">SAVE TO CACHE</button>
+                <button class="btn" onclick="loadFromLocalStorage()">LOAD FROM CACHE</button>
+            </div>
+            <input type="file" id="yaml-import" accept=".yaml,.yml" style="display: none;">
         </div>
     `;
     
+    // Setup form handlers
     document.getElementById('item-form').addEventListener('submit', (e) => {
         e.preventDefault();
         addItem();
+    });
+    
+    // Image preview handler
+    document.getElementById('item-image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('image-preview');
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border: 2px solid var(--terminal-border);">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // YAML import handler
+    document.getElementById('yaml-import').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    // Parse YAML manually (simple parser for our structure)
+                    const content = e.target.result;
+                    parseAndLoadYAML(content);
+                    alert('YAML data imported successfully!');
+                    refreshAllSections();
+                } catch (error) {
+                    alert('Error importing YAML: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
     });
 }
 
@@ -587,14 +693,24 @@ function addItem() {
         tags: document.getElementById('tags').value.split(',').map(t => t.trim()).filter(t => t)
     };
     
+    // Handle image upload
+    const imageInput = document.getElementById('item-image');
+    const imagePreview = document.getElementById('image-preview').querySelector('img');
+    
+    if (imagePreview && imagePreview.src.startsWith('data:')) {
+        // Generate a filename based on the item name
+        const filename = newItem.name.toLowerCase().replace(/\s+/g, '_') + '.png';
+        newItem.image = filename;
+        newItem.imageData = imagePreview.src; // Store as base64 for localStorage
+    }
+    
     person.inventory.push(newItem);
     
+    // Save to localStorage
+    saveToLocalStorage();
+    
     // Refresh displays
-    document.getElementById('personnel-grid').innerHTML = '';
-    document.getElementById('inventory-grid').innerHTML = '';
-    renderPersonnel();
-    renderInventory();
-    renderPowerGrid();
+    refreshAllSections();
     
     clearForm();
     alert('Item added successfully!');
@@ -602,6 +718,175 @@ function addItem() {
 
 function clearForm() {
     document.getElementById('item-form').reset();
+    document.getElementById('image-preview').innerHTML = '';
+}
+
+// Refresh all display sections
+function refreshAllSections() {
+    document.getElementById('personnel-grid').innerHTML = '';
+    document.getElementById('inventory-grid').innerHTML = '';
+    document.getElementById('power-stats').innerHTML = '';
+    
+    renderPersonnel();
+    renderInventory();
+    renderPowerGrid();
+}
+
+// LocalStorage functions
+function saveToLocalStorage() {
+    try {
+        const dataToSave = {
+            ...expeditionData,
+            savedAt: new Date().toISOString()
+        };
+        
+        // Convert to JSON string
+        const jsonString = JSON.stringify(dataToSave);
+        
+        // Check size (localStorage typically has 5-10MB limit)
+        const sizeInBytes = new Blob([jsonString]).size;
+        const sizeInMB = (sizeInBytes / 1024 / 1024).toFixed(2);
+        
+        if (sizeInMB > 5) {
+            if (!confirm(`Data size is ${sizeInMB}MB. This might exceed browser limits. Continue?`)) {
+                return;
+            }
+        }
+        
+        localStorage.setItem('expeditionData', jsonString);
+        console.log(`Data saved to cache (${sizeInMB}MB)`);
+        alert('Data saved to browser cache successfully!');
+    } catch (error) {
+        alert('Error saving to cache: ' + error.message);
+    }
+}
+
+function loadFromLocalStorage() {
+    try {
+        const savedData = localStorage.getItem('expeditionData');
+        if (!savedData) {
+            alert('No cached data found!');
+            return;
+        }
+        
+        const parsedData = JSON.parse(savedData);
+        
+        // Restore the data
+        expeditionData.trip_name = parsedData.trip_name;
+        expeditionData.date = parsedData.date;
+        expeditionData.location = parsedData.location;
+        expeditionData.people = parsedData.people;
+        
+        // Update UI with loaded data
+        document.getElementById('expedition-date').textContent = expeditionData.date;
+        document.getElementById('expedition-location').textContent = expeditionData.location.toUpperCase();
+        
+        refreshAllSections();
+        setupEditForm(); // Refresh the form with new people list
+        
+        alert(`Data loaded from cache (saved at ${new Date(parsedData.savedAt).toLocaleString()})`);
+    } catch (error) {
+        alert('Error loading from cache: ' + error.message);
+    }
+}
+
+// Simple YAML parser for our specific format
+function parseAndLoadYAML(yamlContent) {
+    const lines = yamlContent.split('\n');
+    const newData = {
+        trip_name: '',
+        date: '',
+        location: '',
+        people: []
+    };
+    
+    let currentPerson = null;
+    let currentItem = null;
+    let inTags = false;
+    
+    for (let line of lines) {
+        const trimmed = line.trim();
+        
+        // Skip empty lines
+        if (!trimmed) continue;
+        
+        // Parse top-level fields
+        if (line.startsWith('trip_name:')) {
+            newData.trip_name = extractValue(line);
+        } else if (line.startsWith('date:')) {
+            newData.date = extractValue(line);
+        } else if (line.startsWith('location:')) {
+            newData.location = extractValue(line);
+        }
+        
+        // Parse people
+        else if (trimmed.startsWith('- name:') && line.indexOf('- name:') < 4) {
+            if (currentPerson) newData.people.push(currentPerson);
+            currentPerson = {
+                name: extractValue(trimmed),
+                role: '',
+                inventory: []
+            };
+            currentItem = null;
+        } else if (trimmed.startsWith('role:') && currentPerson) {
+            currentPerson.role = extractValue(trimmed);
+        }
+        
+        // Parse inventory items
+        else if (trimmed.startsWith('- name:') && currentPerson) {
+            if (currentItem) currentPerson.inventory.push(currentItem);
+            currentItem = {
+                name: extractValue(trimmed),
+                tags: []
+            };
+            inTags = false;
+        } else if (currentItem) {
+            if (trimmed.startsWith('type:')) {
+                currentItem.type = extractValue(trimmed);
+            } else if (trimmed.startsWith('description:')) {
+                currentItem.description = extractValue(trimmed);
+            } else if (trimmed.startsWith('power_source:')) {
+                currentItem.power_source = extractValue(trimmed);
+            } else if (trimmed.startsWith('capacity_mwh:')) {
+                currentItem.capacity_mwh = parseInt(extractValue(trimmed)) || 0;
+            } else if (trimmed.startsWith('tags:')) {
+                // Parse inline tags like [tag1, tag2]
+                const tagMatch = trimmed.match(/tags:\s*\[(.*?)\]/);
+                if (tagMatch) {
+                    currentItem.tags = tagMatch[1].split(',').map(t => t.trim());
+                }
+            }
+        }
+    }
+    
+    // Don't forget the last person and item
+    if (currentItem && currentPerson) currentPerson.inventory.push(currentItem);
+    if (currentPerson) newData.people.push(currentPerson);
+    
+    // Update the global data
+    expeditionData.trip_name = newData.trip_name;
+    expeditionData.date = newData.date;
+    expeditionData.location = newData.location;
+    expeditionData.people = newData.people;
+    
+    // Update UI
+    document.getElementById('expedition-date').textContent = expeditionData.date;
+    document.getElementById('expedition-location').textContent = expeditionData.location.toUpperCase();
+}
+
+function extractValue(line) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex === -1) return '';
+    
+    let value = line.substring(colonIndex + 1).trim();
+    
+    // Remove quotes if present
+    if ((value.startsWith('"') && value.endsWith('"')) || 
+        (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+    }
+    
+    return value;
 }
 
 function exportData() {
@@ -630,28 +915,106 @@ ${person.inventory.map(item => `      - name: "${item.name}"
 // Command input
 function setupCommandInput() {
     const input = document.querySelector('.command-input');
+    const output = document.getElementById('terminal-output');
+    
+    // Show initial welcome message
+    addTerminalOutput('VAULT-TEC TERMINAL READY', 'response');
+    addTerminalOutput('Type "help" for available commands', 'response');
     
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            const command = input.value.toLowerCase();
-            executeCommand(command);
-            input.value = '';
+            const command = input.value.trim();
+            if (command) {
+                executeCommand(command);
+                input.value = '';
+            }
         }
     });
 }
 
+function addTerminalOutput(text, type = 'response') {
+    const output = document.getElementById('terminal-output');
+    const line = document.createElement('div');
+    line.className = `terminal-output-line ${type}`;
+    line.textContent = text;
+    output.appendChild(line);
+    output.classList.add('active');
+    
+    // Auto-scroll to bottom
+    output.scrollTop = output.scrollHeight;
+    
+    // Limit output lines
+    while (output.children.length > 20) {
+        output.removeChild(output.firstChild);
+    }
+}
+
 function executeCommand(command) {
+    // Add command to output
+    addTerminalOutput(`> ${command}`, 'command');
+    
+    const lowerCommand = command.toLowerCase();
+    
     const responses = {
-        'help': 'Available commands: help, status, power, clear, export',
-        'status': 'All systems operational. Expedition ready.',
-        'power': `Total power capacity: ${calculateTotalPower().toLocaleString()} mWh`,
-        'clear': () => { console.clear(); return 'Terminal cleared.'; },
-        'export': () => { exportData(); return 'Data exported.'; }
+        'help': () => {
+            addTerminalOutput('AVAILABLE COMMANDS:', 'response');
+            addTerminalOutput('  help     - Show this help message', 'response');
+            addTerminalOutput('  status   - Display expedition status', 'response');
+            addTerminalOutput('  power    - Show total power capacity', 'response');
+            addTerminalOutput('  roster   - List expedition members', 'response');
+            addTerminalOutput('  clear    - Clear terminal output', 'response');
+            addTerminalOutput('  export   - Export data to YAML', 'response');
+            addTerminalOutput('  date     - Show current date/time', 'response');
+            addTerminalOutput('  rad      - Check radiation levels', 'response');
+        },
+        'status': () => {
+            addTerminalOutput('EXPEDITION STATUS: ACTIVE', 'response');
+            addTerminalOutput(`Location: ${expeditionData.location}`, 'response');
+            addTerminalOutput(`Date: ${expeditionData.date}`, 'response');
+            addTerminalOutput('All systems operational', 'response');
+        },
+        'power': () => {
+            const total = calculateTotalPower();
+            addTerminalOutput(`TOTAL POWER CAPACITY: ${total.toLocaleString()} mWh`, 'response');
+            addTerminalOutput('Power systems: OPTIMAL', 'response');
+        },
+        'roster': () => {
+            addTerminalOutput('EXPEDITION ROSTER:', 'response');
+            expeditionData.people.forEach(person => {
+                addTerminalOutput(`  ${person.name} - ${person.role}`, 'response');
+            });
+        },
+        'clear': () => {
+            const output = document.getElementById('terminal-output');
+            output.innerHTML = '';
+            addTerminalOutput('Terminal cleared', 'response');
+        },
+        'export': () => {
+            exportData();
+            addTerminalOutput('Data exported to YAML file', 'response');
+        },
+        'date': () => {
+            const now = new Date();
+            addTerminalOutput(`Current date/time: ${now.toLocaleString()}`, 'response');
+        },
+        'rad': () => {
+            const rad = document.getElementById('radiation-level').textContent;
+            addTerminalOutput(`Radiation level: ${rad} rads/sec`, 'response');
+            if (parseFloat(rad) > 0.1) {
+                addTerminalOutput('WARNING: Elevated radiation detected!', 'error');
+            } else {
+                addTerminalOutput('Radiation levels: SAFE', 'response');
+            }
+        }
     };
     
-    const response = responses[command] || 'Command not recognized. Type "help" for available commands.';
-    console.log(`> ${command}`);
-    console.log(typeof response === 'function' ? response() : response);
+    // Execute command
+    if (responses[lowerCommand]) {
+        responses[lowerCommand]();
+    } else {
+        addTerminalOutput(`ERROR: Unknown command "${command}"`, 'error');
+        addTerminalOutput('Type "help" for available commands', 'response');
+    }
 }
 
 function calculateTotalPower() {

@@ -562,6 +562,215 @@ body::before {
     margin: 0 auto;
 }
 
+/* TV Screen Effect for Data Entry */
+#add-edit-section {
+    position: relative;
+    overflow: visible;
+    min-height: 600px;
+}
+
+.edit-section-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+/* Side Terminal Monitor */
+.side-terminal-monitor {
+    position: absolute;
+    left: -340px;
+    top: 60px;
+    width: 280px;
+    background: var(--terminal-bg);
+    border: 3px solid var(--terminal-border);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 0, 0.3),
+        inset 0 0 30px rgba(0, 255, 0, 0.1);
+    overflow: hidden;
+}
+
+/* For larger screens, make it sticky */
+@media (min-width: 1400px) {
+    .side-terminal-monitor {
+        position: sticky;
+        left: auto;
+        top: 100px;
+    }
+}
+
+.monitor-header {
+    background: #1c2128;
+    margin: -15px -15px 15px -15px;
+    padding: 10px 15px;
+    border-bottom: 2px solid var(--terminal-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.monitor-title {
+    color: var(--terminal-amber);
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.monitor-status {
+    display: flex;
+    gap: 8px;
+}
+
+.status-light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--terminal-green);
+    animation: statusBlink 2s infinite;
+}
+
+@keyframes statusBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.monitor-screen {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #000;
+    border: 2px solid var(--terminal-border);
+    overflow: hidden;
+}
+
+.monitor-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(0.2) contrast(1.2) brightness(0.9);
+    animation: tvDistortion 5s ease-in-out infinite;
+}
+
+.monitor-screen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0.3) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+    pointer-events: none;
+    z-index: 1;
+    animation: scanlines 8s linear infinite;
+}
+
+.monitor-screen::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 0, 0.05);
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: screen;
+}
+
+.monitor-info {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--terminal-border);
+}
+
+.monitor-label {
+    color: var(--terminal-amber);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.monitor-data {
+    color: var(--terminal-green);
+    font-size: 16px;
+    text-shadow: 0 0 5px currentColor;
+}
+
+#add-edit-section .edit-form {
+    flex: 1;
+}
+
+/* Responsive layouts */
+@media (max-width: 1399px) {
+    .side-terminal-monitor {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto 30px auto;
+    }
+    
+    .edit-section-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1600px) {
+    .side-terminal-monitor {
+        width: 300px;
+        left: -360px;
+    }
+}
+
+@keyframes tvStatic {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-1px, -1px); }
+    20% { transform: translate(1px, 1px); }
+    30% { transform: translate(-1px, 1px); }
+    40% { transform: translate(1px, -1px); }
+    50% { transform: translate(0, 1px); }
+    60% { transform: translate(1px, 0); }
+    70% { transform: translate(0, -1px); }
+    80% { transform: translate(-1px, 0); }
+    90% { transform: translate(1px, 1px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes tvDistortion {
+    0%, 100% { 
+        filter: blur(0.5px) brightness(1) contrast(1.2);
+        transform: scale(1) skew(0deg);
+    }
+    25% { 
+        filter: blur(0.8px) brightness(1.1) contrast(1.3);
+        transform: scale(1.02) skew(0.5deg);
+    }
+    50% { 
+        filter: blur(0.3px) brightness(0.95) contrast(1.1);
+        transform: scale(0.98) skew(-0.5deg);
+    }
+    75% { 
+        filter: blur(0.6px) brightness(1.05) contrast(1.25);
+        transform: scale(1.01) skew(0.3deg);
+    }
+}
+
+@keyframes scanlines {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(10px); }
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -632,6 +841,52 @@ body::before {
     border-top: 2px solid var(--terminal-border);
     padding: 10px 20px;
     background: #1c2128;
+}
+
+.terminal-output {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--terminal-border);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    display: none;
+}
+
+.terminal-output.active {
+    display: block;
+}
+
+.terminal-output-line {
+    margin: 5px 0;
+    animation: terminalTyping 0.5s ease-out;
+}
+
+.terminal-output-line.command {
+    color: var(--terminal-amber);
+}
+
+.terminal-output-line.response {
+    color: var(--terminal-green);
+    padding-left: 20px;
+}
+
+.terminal-output-line.error {
+    color: var(--terminal-red);
+    padding-left: 20px;
+}
+
+@keyframes terminalTyping {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .terminal-input {
