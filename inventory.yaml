@@ -1,0 +1,87 @@
+trip_name: "Duluth Gold Mining Expedition"
+date: "2025-07-05"
+location: "Undisclosed Woodland Coordinates"
+people:
+  - name: "Brando and Jovita"
+    role: "Wizards"
+    inventory:
+      - name: "Anker SOLIX C300"
+        type: "Power Station"
+        description: "Primary battery for Pi and laptop use."
+        power_output: "300W (AC/DC/USB-C)"
+        capacity_mwh: 300000
+        power_source: "Battery"
+        tags: [power, anchor, main]
+      - name: "Hand Warmer #1"
+        type: "Hand Warmer / Emergency Charger"
+        description: "4500 mWh unit with USB-C output."
+        capacity_mwh: 4500
+        power_source: "Battery"
+        tags: [warmth, backup, usb-c]
+      - name: "Hand Warmer #2"
+        type: "Hand Warmer / Emergency Charger"
+        description: "Identical to #1. Twin unit."
+        capacity_mwh: 4500
+        power_source: "Battery"
+        tags: [warmth, backup, usb-c]
+      - name: "Coat Warmer Battery"
+        type: "Wearable Battery"
+        description: "20000 mWh coat battery with USB-C output."
+        capacity_mwh: 20000
+        power_source: "Battery"
+        tags: [clothing, warmth, wearable]
+      - name: "Geiger Counter Board"
+        type: "Sensor"
+        description: "Radiation detection module."
+        power_source: "Pi GPIO"
+        tags: [sensor, safety, radiation]
+      - name: "Raspberry Pi Node"
+        type: "Microcomputer"
+        description: "Dedicated Pi for Geiger input, data logging."
+        power_source: "USB-C (from SOLIX)"
+        tags: [compute, ai, sensor-node]
+      - name: "Eleanor"
+        type: "Dog"
+        description: "Security Anjing, blue merle variant"
+        tags: [companion, security, bark]
+        power_source: "Beef treats"
+      - name: "Directed Plasma Energy Weapon"
+        type: "Tool"
+        description: "Real Lightsaber"
+        tags: [fire, defense, force"
+        power_source: "onboard mystical energy"
+      - name: "Field Survival Kit"
+        type: "Tools"
+        description: "Box of shit"
+        power_source: "Battery, Humans"
+        tags: [saw, compass, flashlight]
+        
+  - name: "Benji"
+    role: "Guide"
+    inventory:
+      - name: "Sample Item"
+        type: "Gear / Gadget / Tool"
+        description: "Short description here."
+        power_source: "Battery / Solar / Manual"
+        capacity_mwh: 0000
+        tags: [tag1, tag2]
+    
+  - name: "Matt and Apple Juice"
+    role: "Moral Support - LoL Jungle"
+    inventory:
+      - name: "Sample Item"
+        type: "Gear / Gadget / Tool"
+        description: "Short description here."
+        power_source: "Battery / Solar / Manual"
+        capacity_mwh: 0000
+        tags: [tag1, tag2]
+        
+  - name: "Zeus"
+    role: "Party Patrol and Music"
+    inventory:
+      - name: "Sample Item"
+        type: "Gear / Gadget / Tool"
+        description: "Short description here."
+        power_source: "Battery / Solar / Manual"
+        capacity_mwh: 0000
+        tags: [tag1, tag2]

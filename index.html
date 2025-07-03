@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duluth Gold Mining Expedition Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-title">VAULT-TEC EXPEDITION TERMINAL V2.7</div>
+            <div class="terminal-controls">
+                <span class="control-btn minimize">_</span>
+                <span class="control-btn maximize">□</span>
+                <span class="control-btn close">X</span>
+            </div>
+        </div>
+        
+        <div class="terminal-content">
+            <div class="boot-sequence">
+                <pre class="ascii-art">
+    ____  __  ____   __  ____________     __________  __    ____ 
+   / __ \/ / / / /  / / / /_  __/ __ \   / ____/ __ \/ /   / __ \
+  / / / / / / / /  / / / / / / / /_/ /  / / __/ / / / /   / / / /
+ / /_/ / /_/ / /__/ /_/ / / / / __  /  / /_/ / /_/ / /___/ /_/ / 
+/_____/\____/_____\____/ /_/ /_/ /_/   \____/\____/_____/_____/  
+                                                                  
+                <span class="gold-text">MINING EXPEDITION</span> <span class="red-text">TERMINAL v2.7</span>
+                </pre>
+                <div class="loading-text">Initializing <span class="gold-text">expedition database</span>...</div>
+            </div>
+
+            <div class="main-interface" style="display: none;">
+                <header class="expedition-header">
+                    <h1 class="glitch" data-text="DULUTH GOLD MINING EXPEDITION">DULUTH GOLD MINING EXPEDITION</h1>
+                    <div class="expedition-info">
+                        <span class="info-item">DATE: <span id="expedition-date">2025-07-05</span></span>
+                        <span class="info-item">LOCATION: <span id="expedition-location">UNDISCLOSED WOODLAND COORDINATES</span></span>
+                        <span class="info-item">STATUS: <span class="status-active">ACTIVE</span></span>
+                    </div>
+                </header>
+
+                <nav class="terminal-nav">
+                    <button class="nav-btn active" data-section="roster">PERSONNEL ROSTER</button>
+                    <button class="nav-btn" data-section="inventory">INVENTORY MANIFEST</button>
+                    <button class="nav-btn" data-section="map">PROSPECTING MAP</button>
+                    <button class="nav-btn" data-section="power">POWER GRID</button>
+                    <button class="nav-btn" data-section="add-edit">ADD/EDIT ENTRY</button>
+                </nav>
+
+                <main class="content-area">
+                    <section id="roster-section" class="content-section active">
+                        <h2 class="section-title">PERSONNEL DATABASE</h2>
+                        <div id="personnel-grid" class="personnel-grid"></div>
+                    </section>
+
+                    <section id="inventory-section" class="content-section">
+                        <h2 class="section-title">INVENTORY MANIFEST</h2>
+                        <div id="inventory-grid" class="inventory-grid"></div>
+                    </section>
+
+                    <section id="map-section" class="content-section">
+                        <h2 class="section-title">DULUTH PROSPECTING MAP</h2>
+                        <div id="map-container" class="map-container"></div>
+                    </section>
+
+                    <section id="power-section" class="content-section">
+                        <h2 class="section-title">POWER GRID ANALYSIS</h2>
+                        <div id="power-stats" class="power-stats"></div>
+                    </section>
+
+                    <section id="add-edit-section" class="content-section">
+                        <h2 class="section-title">DATA ENTRY TERMINAL</h2>
+                        <div id="edit-form" class="edit-form"></div>
+                    </section>
+                </main>
+
+                <footer class="terminal-footer">
+                    <div class="terminal-input">
+                        <span class="prompt">&gt;</span>
+                        <input type="text" class="command-input" placeholder="Enter command...">
+                    </div>
+                    <div class="status-bar">
+                        <span class="status-item">MEM: 64K</span>
+                        <span class="status-item">CPU: 486DX</span>
+                        <span class="status-item">RAD: <span id="radiation-level">0.02</span></span>
+                        <span class="status-item" id="clock">00:00:00</span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="js-yaml.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
