@@ -3,118 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duluth Gold Mining Expedition Terminal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Expedition Central - Mining & Exploration Database</title>
+    <link rel="stylesheet" href="expedition-styles.css">
 </head>
 <body>
-    <div class="terminal-container">
-        <div class="terminal-header">
-            <div class="terminal-title">VAULT-TEC EXPEDITION TERMINAL V2.7</div>
-            <div class="terminal-controls">
-                <span class="control-btn minimize">_</span>
-                <span class="control-btn maximize">□</span>
-                <span class="control-btn close">X</span>
+    <div class="page-container">
+        <header class="main-header">
+            <div class="header-content">
+                <h1 class="site-title">EXPEDITION CENTRAL</h1>
+                <p class="site-subtitle">Mining & Exploration Mission Database</p>
             </div>
-        </div>
-        
-        <div class="terminal-content">
-            <div class="boot-sequence">
-                <pre class="ascii-art">
-    ____  __  ____   __  ___________     __________  __    ____ 
-   / __ \/ / / / /  / / / /_  __/ /__/   / ____/ __ \/ /   / __ \
-  / / / / / / / /  / / / / / / / /_/ /  / / __/ / / / /   / / / /
- / /_/ / /_/ / /__/ /_/ / / / / __  /  / /_/ / /_/ / /___/ /_/ / 
-/_____/\____/_____\____/ /_/ /_/ /_/   \____/\____/_____/_____/  
-                                                                  
-                <span class="gold-text">MINING EXPEDITION</span> <span class="red-text">TERMINAL v2.7</span>
-                </pre>
-                <div class="loading-text">Initializing <span class="gold-text">expedition database</span>...</div>
-            </div>
+            <nav class="main-nav">
+                <a href="#current" class="nav-link active">Current Expeditions</a>
+                <a href="#upcoming" class="nav-link">Upcoming Missions</a>
+                <a href="#archive" class="nav-link">Mission Archive</a>
+                <a href="#resources" class="nav-link">Resources</a>
+            </nav>
+        </header>
 
-            <div class="main-interface" style="display: none;">
-                <header class="expedition-header">
-                    <h1 class="glitch" data-text="DULUTH GOLD MINING EXPEDITION">DULUTH GOLD MINING EXPEDITION</h1>
-                    <div class="expedition-info">
-                        <span class="info-item">DATE: <span id="expedition-date">2025-07-05</span></span>
-                        <span class="info-item">LOCATION: <span id="expedition-location">UNDISCLOSED WOODLAND COORDINATES</span></span>
-                        <span class="info-item">STATUS: <span class="status-active">ACTIVE</span></span>
-                    </div>
-                </header>
+        <main class="main-content">
+            <section id="hero" class="hero-section">
+                <div class="hero-content">
+                    <h2 class="hero-title">Tracking Bold Expeditions Into the Unknown</h2>
+                    <p class="hero-description">
+                        From gold mining in the wilderness to exploring uncharted territories, 
+                        we document and manage expedition inventories, personnel, and mission data.
+                    </p>
+                </div>
+            </section>
 
-                <nav class="terminal-nav">
-                    <button class="nav-btn active" data-section="roster">PERSONNEL ROSTER</button>
-                    <button class="nav-btn" data-section="inventory">INVENTORY MANIFEST</button>
-                    <button class="nav-btn" data-section="map">PROSPECTING MAP</button>
-                    <button class="nav-btn" data-section="power">POWER GRID</button>
-                    <button class="nav-btn" data-section="add-edit">ADD/EDIT ENTRY</button>
-                </nav>
-
-                <main class="content-area">
-                    <section id="roster-section" class="content-section active">
-                        <h2 class="section-title">PERSONNEL DATABASE</h2>
-                        <div id="personnel-grid" class="personnel-grid"></div>
-                    </section>
-
-                    <section id="inventory-section" class="content-section">
-                        <h2 class="section-title">INVENTORY MANIFEST</h2>
-                        <div id="inventory-grid" class="inventory-grid"></div>
-                    </section>
-
-                    <section id="map-section" class="content-section">
-                        <h2 class="section-title">DULUTH PROSPECTING MAP</h2>
-                        <div id="map-container" class="map-container"></div>
-                    </section>
-
-                    <section id="power-section" class="content-section">
-                        <h2 class="section-title">POWER GRID ANALYSIS</h2>
-                        <div id="power-stats" class="power-stats"></div>
-                    </section>
-
-                    <section id="add-edit-section" class="content-section">
-                        <h2 class="section-title">DATA ENTRY TERMINAL</h2>
-                        <div class="edit-section-container">
-                            <div class="side-terminal-monitor">
-                                <div class="monitor-header">
-                                    <span class="monitor-title">VISUAL FEED</span>
-                                    <div class="monitor-status">
-                                        <span class="status-light"></span>
-                                        <span class="status-light"></span>
-                                        <span class="status-light"></span>
-                                    </div>
+            <section id="current" class="expeditions-section">
+                <h2 class="section-title">Current Expeditions</h2>
+                <div class="expedition-grid">
+                    <article class="expedition-card featured">
+                        <div class="expedition-image">
+                            <img src="assets/mainpageimage.png" alt="Duluth Gold Mining Expedition">
+                            <div class="expedition-status active">ACTIVE</div>
+                        </div>
+                        <div class="expedition-details">
+                            <h3 class="expedition-name">Duluth Gold Mining Expedition</h3>
+                            <div class="expedition-meta">
+                                <span class="meta-item">
+                                    <strong>Date:</strong> July 5, 2025
+                                </span>
+                                <span class="meta-item">
+                                    <strong>Location:</strong> Undisclosed Woodland Coordinates
+                                </span>
+                            </div>
+                            <p class="expedition-description">
+                                A specialized gold prospecting mission featuring advanced power management systems, 
+                                radiation detection equipment, and a diverse team including wizards, guides, and 
+                                security personnel. Total power capacity: 329 kWh across multiple battery systems.
+                            </p>
+                            <div class="expedition-stats">
+                                <div class="stat">
+                                    <span class="stat-value">4</span>
+                                    <span class="stat-label">Team Members</span>
                                 </div>
-                                <div class="monitor-screen">
-                                    <img src="assets/mainpageimage.png" alt="Expedition Visual" class="monitor-image">
+                                <div class="stat">
+                                    <span class="stat-value">9+</span>
+                                    <span class="stat-label">Equipment Items</span>
                                 </div>
-                                <div class="monitor-info">
-                                    <div class="monitor-label">SIGNAL STRENGTH</div>
-                                    <div class="monitor-data">87.3%</div>
-                                    <div class="monitor-label" style="margin-top: 10px;">LOCATION</div>
-                                    <div class="monitor-data">DULUTH SECTOR</div>
+                                <div class="stat">
+                                    <span class="stat-value">329 kWh</span>
+                                    <span class="stat-label">Power Capacity</span>
                                 </div>
                             </div>
-                            <div id="edit-form" class="edit-form"></div>
+                            <a href="terminal.html" class="expedition-link">Access Terminal →</a>
                         </div>
-                    </section>
-                </main>
+                    </article>
+                </div>
+            </section>
 
-                <footer class="terminal-footer">
-                    <div class="terminal-output" id="terminal-output"></div>
-                    <div class="terminal-input">
-                        <span class="prompt">&gt;</span>
-                        <input type="text" class="command-input" placeholder="Type 'help' for commands">
+            <section id="upcoming" class="expeditions-section">
+                <h2 class="section-title">Upcoming Missions</h2>
+                <div class="expedition-grid">
+                    <article class="expedition-card placeholder">
+                        <div class="expedition-image placeholder-image">
+                            <div class="expedition-status upcoming">PLANNING</div>
+                        </div>
+                        <div class="expedition-details">
+                            <h3 class="expedition-name">Silver Creek Survey</h3>
+                            <div class="expedition-meta">
+                                <span class="meta-item">
+                                    <strong>Date:</strong> August 2025
+                                </span>
+                                <span class="meta-item">
+                                    <strong>Location:</strong> TBD
+                                </span>
+                            </div>
+                            <p class="expedition-description">
+                                Geological survey mission focusing on silver deposits. Team assembly in progress.
+                            </p>
+                            <span class="coming-soon">Details Coming Soon</span>
+                        </div>
+                    </article>
+
+                    <article class="expedition-card placeholder">
+                        <div class="expedition-image placeholder-image">
+                            <div class="expedition-status upcoming">RECRUITING</div>
+                        </div>
+                        <div class="expedition-details">
+                            <h3 class="expedition-name">Copper Mountain Expedition</h3>
+                            <div class="expedition-meta">
+                                <span class="meta-item">
+                                    <strong>Date:</strong> September 2025
+                                </span>
+                                <span class="meta-item">
+                                    <strong>Location:</strong> TBD
+                                </span>
+                            </div>
+                            <p class="expedition-description">
+                                Deep mountain exploration for copper ore deposits. Seeking experienced climbers.
+                            </p>
+                            <span class="coming-soon">Details Coming Soon</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="features" class="features-section">
+                <h2 class="section-title">Expedition Management Features</h2>
+                <div class="features-grid">
+                    <div class="feature">
+                        <h3 class="feature-title">Inventory Tracking</h3>
+                        <p class="feature-description">
+                            Comprehensive equipment and supply management with power capacity monitoring
+                        </p>
                     </div>
-                    <div class="status-bar">
-                        <span class="status-item">MEM: 64K</span>
-                        <span class="status-item">CPU: 486DX</span>
-                        <span class="status-item">RAD: <span id="radiation-level">0.02</span></span>
-                        <span class="status-item" id="clock">00:00:00</span>
+                    <div class="feature">
+                        <h3 class="feature-title">Personnel Roster</h3>
+                        <p class="feature-description">
+                            Detailed team member profiles with roles and individual equipment assignments
+                        </p>
                     </div>
-                </footer>
-            </div>
-        </div>
+                    <div class="feature">
+                        <h3 class="feature-title">Power Management</h3>
+                        <p class="feature-description">
+                            Real-time power grid analysis and battery capacity tracking for off-grid operations
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <h3 class="feature-title">Mission Terminal</h3>
+                        <p class="feature-description">
+                            Retro-styled command interface for accessing expedition data and reports
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>&copy; 2025 Expedition Central. All expeditions subject to weather and mystical energy availability.</p>
+        </footer>
     </div>
-
-    <script src="js-yaml.min.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
